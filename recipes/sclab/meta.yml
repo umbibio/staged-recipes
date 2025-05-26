@@ -1,0 +1,64 @@
+{% set name = "sclab" %}
+{% set version = "0.2.5" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/sclab-{{ version }}.tar.gz
+  sha256: e35e7db85e59f68af52b4ba70a425f4bbb63bc406ea9466d397bf467dab12c33
+
+build:
+  noarch: python
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  number: 0
+
+requirements:
+  host:
+    - python >=3.10,<3.13
+    - flit-core >=3.2,<4
+    - pip
+  run:
+    - python >=3.10,<3.13
+    - anndata
+    - anywidget
+    - ipywidgets
+    - itables
+    - matplotlib-base
+    - numpy <2.2
+    - pandas
+    - plotly <6.0
+    - requests
+    - scikit-learn
+    - svgpathtools
+    - tqdm
+
+test:
+  imports:
+    - sclab
+    - ipywidgets
+    - pandas
+    - itables
+    - anndata
+    - plotly
+    - svgpathtools
+    - sklearn
+  commands:
+    - pip check
+    - pip show plotly
+    - python -c "import plotly; assert plotly.__version__ < '6.0'"
+  requires:
+    - pip
+    - pytest
+
+about:
+  home: https://pypi.org/project/sclab/
+  summary: sclab - single-cell analysis toolkit
+  dev_url: https://github.com/umbibio/sclab
+  license: BSD-3-Clause
+  license_file: LICENSE
+
+extra:
+  recipe-maintainers:
+    - Prarthana-Prathap
